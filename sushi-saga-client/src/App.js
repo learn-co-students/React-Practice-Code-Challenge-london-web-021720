@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+  import { connect } from 'react-redux'
 import SushiContainer from './containers/SushiContainer';
 import Table from './containers/Table';
 
@@ -6,6 +7,18 @@ import Table from './containers/Table';
 const API = "http://localhost:3000/sushis"
 
 class App extends Component {
+
+  componentDidMount(){
+    this.getSushis()
+  }
+
+  getSushis = () =>{
+
+    fetch(API)
+    .then(resp => resp.json())
+    .then(obj => this.props.setSushis(obj))
+
+  }
 
   render() {
     return (
@@ -17,4 +30,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    setSushis: sushis => dispatch({type: "SET_SUSHIS", payload: {sushis:sushis}})
+  }
+}
+
+export default connect(null, mapDispatchToProps) (App);
