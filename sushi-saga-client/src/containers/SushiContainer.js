@@ -1,19 +1,35 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import MoreButton from '../components/MoreButton'
+import Sushi from '../components/Sushi'
+import { connect } from 'react-redux'
 
-const SushiContainer = (props) => {
+
+const SushiContainer = ({sushis}) => {
+ 
+const [limit, setLimit] = useState(5);
+const [initialSushi, setInitialSushi] = useState(0);
+const sendMore = (number) => {
+
+  setLimit(limit + number)
+  setInitialSushi(initialSushi + number)
+}
+
   return (
     <Fragment>
       <div className="belt">
         {
-          /* 
-             Render Sushi components here!
-          */
+            sushis.slice(initialSushi, limit).map(sushi => <Sushi sushi={sushi}/> )
         }
-        <MoreButton />
+        <MoreButton sendMore={sendMore} />
       </div>
     </Fragment>
   )
 }
 
-export default SushiContainer
+const mapStateToProps = state =>{
+  return {
+    sushis: state.sushis
+  }
+}
+
+export default connect(mapStateToProps) (SushiContainer)
